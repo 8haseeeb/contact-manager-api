@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: contact-manager-api
+    env: docker
+    plan: free
+    branch: main
+    repo: https://github.com/8haseeeb/contact-manager-api
+    dockerfilePath: ./Dockerfile
+    autoDeploy: true
