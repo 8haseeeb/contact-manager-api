@@ -21,17 +21,11 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Use CORS
 app.UseCors("AllowAngularApp");
-
-// Optional: Skip HTTPS redirection for Railway
-// app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
-// ✅ Railway fix: Bind to dynamic PORT
+// ✅ This part is CRITICAL for Railway
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 app.Urls.Add($"http://*:{port}");
 
