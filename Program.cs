@@ -2,14 +2,18 @@ using ContactManagerApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Register services
+// Register ContactService
 builder.Services.AddSingleton<ContactService>();
+
+// Add controllers
 builder.Services.AddControllers();
+
+// Add CORS policy
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularApp", policy =>
     {
-        policy.WithOrigins("http://localhost:4300", "https://your-angular.vercel.app")
+        policy.WithOrigins("http://localhost:4300", "https://your-frontend-url.vercel.app")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -17,15 +21,17 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// Use CORS
 app.UseCors("AllowAngularApp");
 
-// Optional: Remove HTTPS redirection for Railway
+// Optional: Skip HTTPS redirection for Railway
 // app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
 app.MapControllers();
 
-// ✅ Bind to Railway's expected port
+// ✅ Railway fix: Bind to dynamic PORT
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 app.Urls.Add($"http://*:{port}");
 
